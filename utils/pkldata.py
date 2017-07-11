@@ -1,8 +1,8 @@
 import pickle
 
-def load_data():
-    print("Loading data...")
-    data = pickle.load(open('../analysis.pkl', 'rb'))
+def load_data(name):
+    print("Loading %s..." % name)
+    data = pickle.load(open(name, 'rb'))
     print("Success!")
 
     return data

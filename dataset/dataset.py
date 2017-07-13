@@ -12,13 +12,13 @@ class Dataset:
         self.db = self.client.cuckoo
 
         # loading dictionary files
-        self.pe_sections = load_data(os.path.join(dict_path, 'pe_section.pkl'))
-        self.pe_imports_dict = load_data(os.path.join(dict_path, 'pe_imports_dict.pkl'))
+        self.pe_sections = load_data(os.path.join(dict_path, 'pe_sections.pkl'))
+        self.pe_imports_dict = load_data(os.path.join(dict_path, 'pe_imports_dll.pkl'))
 
         # put the keys in order
         self.pe_imports = []
-        for k in pe_imports_dict:
-            self.pe_imports.append((k, pe_imports_dict[k]))
+        for k in self.pe_imports_dict:
+            self.pe_imports.append((k, self.pe_imports_dict[k]))
 
     def get_dataset(self):
         """
@@ -52,7 +52,7 @@ class Dataset:
                     if section in names:
                         X.extend(names[section])
                     else:
-                        X.extend([0, 0, 0, 0)
+                        X.extend([0, 0, 0, 0])
 
                 ## pe_imports
                 for dll_name, funs in self.pe_imports:
@@ -64,7 +64,8 @@ class Dataset:
                             
                             imports_funs = {}
                             for f in dll['imports']:
-                                imports_funs[f['name'].lower()] = int(f['address'], 16)
+                                if f['name']:
+                                    imports_funs[f['name'].lower()] = int(f['address'], 16)
 
                             for fun in funs:
                                 if fun in imports_funs:
@@ -86,4 +87,4 @@ class Dataset:
                 else:
                     y_data.append(0)
 
-       return (np.array(X_data), np.array(y_data)) 
+        return (np.array(X_data), np.array(y_data)) 

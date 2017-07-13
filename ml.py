@@ -1,38 +1,11 @@
-from build_model import *
-
-dataset_file = '../analysis/dataset/dataset.pkl'
-cv = 5
-dim_inic = 1000
-dim_max = 6000
-steps = 1000
-apply_pca = True
-decomposition_class = FactorAnalysis
-
-output_json_file = 'output.json'
-
-# instantiating classifiers
-clfs = [
-    ('Decision Tree', tree.DecisionTreeClassifier(), 'tree.pkl'),
-    ('Gaussian Naive Bayes', GaussianNB(), 'gnb.pkl'),
-#    ('Multinomial Naive Bayes', MultinomialNB(), 'mnb.pkl'),
-    ('Neural Network MLP', MLPClassifier(solver='lbfgs', alpha=1e-5,
-                               hidden_layer_sizes=(15,), random_state=1), 'nnmlp.pkl'),
-    ('Linear SVM', svm.SVC(kernel='linear', C=1), 'lsvm.pkl'),
-]
+from mldaemon.build_model import *
+from mldaemon.dataset.dataset import Dataset
+from mldaemon.config import *
 
 print("Loading dataset...")
-dataset = pickle.load(open(dataset_file, 'rb'))
+dataset = Dataset(MONGO_HOST, MONGO_PORT, DATABASE_PATH)
+X, y = dataset.get_dataset()
 print("Success!")
-
-# split into X and y vectors
-X = []
-y = []
-for d in dataset:
-    X.append(d[0])
-    y.append(d[1])
-
-X = np.array(X)
-y = np.array(y)
 
 print("Loaded %d samples..." % len(X))
 

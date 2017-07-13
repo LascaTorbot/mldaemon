@@ -13,6 +13,7 @@ MONGO_PORT = 12345
 
 DATABASE_PATH = '/home/esdras/mldaemon/database'
 OUTPUT_PATH = '/home/esdras/mldaemon/output'
+LOG_PATH = '/home/esdras/mldaemon/log'
 
 # ML Algorithms configurations
 

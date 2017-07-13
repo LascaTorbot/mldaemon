@@ -7,13 +7,17 @@ import os
 MIN_POSITIVES_RATE = 0.51
 
 class Dataset:
-    def __init__(self, mongo_host, mongo_port, dict_path):
+    def __init__(self, mongo_host, mongo_port, dict_path, logger):
         self.client = MongoClient(mongo_host, mongo_port)
         self.db = self.client.cuckoo
 
+        self.logger = logger
+
         # loading dictionary files
+        self.logger.log('loading dictionary pkl')
         self.pe_sections = load_data(os.path.join(dict_path, 'pe_sections.pkl'))
         self.pe_imports_dict = load_data(os.path.join(dict_path, 'pe_imports_dll.pkl'))
+        self.logger.log('loaded')
 
         # put the keys in order
         self.pe_imports = []
@@ -25,17 +29,17 @@ class Dataset:
         This func returns a tuple with numpy objects, in order (X, y)
         """
         
+        self.logger.log('generating dataset')
         X_data = []
         y_data = []
 
         # loading data from mongodb
         limit_data = self.db.analysis.count()
         db_data = self.db.analysis.find()
-        count = 0
-        for data_dict in db_data:
-            count += 1
-            progress(count, limit_data)
 
+        self.logger.log('loaded %d data from mongodb' % limit_data)
+        malignants = benigns = 0
+        for data_dict in db_data:
             obj = dict(data_dict)
 
             X = []
@@ -83,8 +87,11 @@ class Dataset:
 
                 # check y label with virus_total submission
                 if obj['virustotal']['positives'] / obj['virustotal']['total'] >= MIN_POSITIVES_RATE:
+                    malignants += 1
                     y_data.append(1)
                 else:
+                    benigns += 1
                     y_data.append(0)
 
+        self.logger.log('dataset generated with %d benigns and %d malignant' % (benigns, malignants))
         return (np.array(X_data), np.array(y_data)) 

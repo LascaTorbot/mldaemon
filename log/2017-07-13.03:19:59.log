@@ -1,0 +1,9 @@
+[03:19:59]: Generating dictionary
+[03:20:06]: generated dictionary using 654 data entries
+[03:20:06]: saving pkl
+[03:20:06]: successfully saved
+[03:20:06]: loading dictionary pkl
+[03:20:06]: loaded
+[03:20:06]: generating dataset
+[03:20:06]: loaded 654 data from mongodb
+[03:20:13]: dataset generated with 529 benigns and 0 malignant

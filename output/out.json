@@ -1,0 +1,25 @@
+{
+    "2867": {
+        "Decision Tree": {
+            "accuracy": 1.0,
+            "fn": 0.0,
+            "fp": 0.0,
+            "tn": 1.0,
+            "tp": 0.0
+        },
+        "Gaussian Naive Bayes": {
+            "accuracy": 1.0,
+            "fn": 0.0,
+            "fp": 0.0,
+            "tn": 1.0,
+            "tp": 0.0
+        },
+        "Neural Network MLP": {
+            "accuracy": 1.0,
+            "fn": 0.0,
+            "fp": 0.0,
+            "tn": 1.0,
+            "tp": 0.0
+        }
+    }
+}

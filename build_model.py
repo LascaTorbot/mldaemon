@@ -38,22 +38,20 @@ def train(clf, kf, X, y, queue):
 
     queue.put((tn_rate, tp_rate, fn_rate, fp_rate))
 
-def build(clfs, X, y, cv):
+def build(clfs, X, y, cv, logger):
     kf = KFold(n_splits=cv)
 
     threads = []
     results = []
 
     for name, clf, __ in clfs:
-        print("Training %s..." % name)
+        logger.log("Training %s..." % name)
 
         q = Queue()
         thread = Thread(target=train, args=(clf, kf, X, y, q))
         thread.start()
         threads.append(thread)
         results.append(q)
-
-    print()
 
     out_json = {}
     for i in range(len(threads)):
@@ -70,7 +68,7 @@ def build(clfs, X, y, cv):
             'accuracy': tp_rate + tn_rate,
         }
 
-        print("%s finished!" % name)
+        logger.log("%s finished!" % name)
 
         pickle.dump(clf, open(output_name, 'wb'))
 

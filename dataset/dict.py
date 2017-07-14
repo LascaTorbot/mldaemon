@@ -4,12 +4,14 @@ from pymongo import MongoClient
 import os
 
 class Dictionary:
-    def __init__(self, mongo_host, mongo_port, logger):
+    def __init__(self, mongo_host, mongo_port, database_path, logger):
+        self.DATABASE_PATH = database_path
+        
         self.client = MongoClient(mongo_host, mongo_port)
         self.db = self.client.cuckoo
         self.logger = logger
 
-    def gen_dict(self, output_path):
+    def gen_dict(self):
         self.logger.log('Generating dictionary')
 
         # loading data from mongodb
@@ -43,6 +45,6 @@ class Dictionary:
         self.logger.log('generated dictionary using %d data entries' % limit_data)
 
         self.logger.log('saving pkl')
-        save_data(pe_sections, os.path.join(output_path, 'pe_sections.pkl'))
-        save_data(dlls, os.path.join(output_path, 'pe_imports_dll.pkl'))
+        save_data(pe_sections, os.path.join(self.DATABASE_PATH, 'pe_sections.pkl'))
+        save_data(dlls, os.path.join(self.DATABASE_PATH, 'pe_imports_dll.pkl'))
         self.logger.log('successfully saved')

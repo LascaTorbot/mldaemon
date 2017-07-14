@@ -52,5 +52,5 @@ class MLDaemon:
         out = build(clfs, X, y, cv, self.logger)
         out_json[dim] = out
 
-        with open(os.path.join(self.OUTPUT_PATH, 'out.json'), 'w') as out_f:
+        with open(output_json_file, 'w') as out_f:
             out_f.write(json.dumps(out_json, indent=4, sort_keys=True))

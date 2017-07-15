@@ -12,10 +12,10 @@ class Logger:
             f.write('')
 
     def log(self, s):
+        self.queue.append('[%s]: %s' % (datetime.now().strftime('%H:%M:%S'), s))
+        
         if len(self.queue) == self.max_queue:
             self.flush()
-
-        self.queue.append('[%s]: %s' % (datetime.now().strftime('%H:%M:%S'), s))
 
     def flush(self):
         with open(self.filename, 'a') as f:

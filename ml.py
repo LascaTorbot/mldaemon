@@ -11,6 +11,7 @@ class MLDaemon:
 
         self.logger.log('Instantiating dictionary...')
         self.dictionary = Dictionary(MONGO_HOST, MONGO_PORT, DATABASE_PATH, logger)
+        self.dictionary.gen_dict()
         self.logger.log('Done!')
 
         self.logger.log("Instantiating dataset...")

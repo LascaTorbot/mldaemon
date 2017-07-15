@@ -19,10 +19,6 @@ class MLDaemon:
         self.logger.log("Done!")
 
     def fit(self):
-        self.logger.log('Generating dictionaries...')
-        self.dictionary.gen_dict()
-        self.logger.log('Success!')
-
         self.logger.log('Loading dataset...')
         X, y = self.dataset.get_dataset()
         self.logger.log('Success!')

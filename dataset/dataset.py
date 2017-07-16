@@ -1,6 +1,7 @@
 from mldaemon.utils.output import *
 from mldaemon.utils.pkldata import *
 from pymongo import MongoClient
+from sklearn.preprocessing import Imputer
 import numpy as np
 import os
 
@@ -56,7 +57,7 @@ class Dataset:
                     if section in names:
                         X.extend(names[section])
                     else:
-                        X.extend([0, 0, 0, 0])
+                        X.extend([None, None, None, None])
 
                 ## pe_imports
                 for dll_name, funs in self.pe_imports:
@@ -75,13 +76,13 @@ class Dataset:
                                 if fun in imports_funs:
                                     X.append(imports_funs[fun])
                                 else:
-                                    X.append(0)
+                                    X.append(None)
 
                             break
                     
                     if not gen:
                         for fun in funs:
-                            X.append(0)
+                            X.append(None)
 
                 X_data.append(np.array(X))
 
@@ -93,5 +94,15 @@ class Dataset:
                     benigns += 1
                     y_data.append(0)
 
+        X_data = np.array(X_data)
+        y_data = np.array(y_data)
+
+        # replacing None values to mean value
+        self.logger.log('replacing NaN values to mean')
+        imp = Imputer(missing_values='NaN', strategy='mean', axis=0)
+        imp.fit(X_data)
+        X_data = imp.transform(X_data)
+        self.logger.log('done!')
+
         self.logger.log('dataset generated with %d benigns and %d malignant' % (benigns, malignants))
-        return (np.array(X_data), np.array(y_data)) 
+        return (X_data, y_data) 

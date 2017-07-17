@@ -57,7 +57,7 @@ class Dataset:
                     if section in names:
                         X.extend(names[section])
                     else:
-                        X.extend([None, None, None, None])
+                        X.extend([np.nan, np.nan, np.nan, np.nan])
 
                 ## pe_imports
                 for dll_name, funs in self.pe_imports:
@@ -76,7 +76,7 @@ class Dataset:
                                 if fun in imports_funs:
                                     X.append(imports_funs[fun])
                                 else:
-                                    X.append(None)
+                                    X.append(np.nan)
 
                             break
                     
@@ -97,7 +97,7 @@ class Dataset:
         X_data = np.array(X_data)
         y_data = np.array(y_data)
 
-        # replacing None values to mean value
+        # replacing NaN values to mean value
         self.logger.log('replacing NaN values to mean')
         imp = Imputer(missing_values='NaN', strategy='mean', axis=0)
         imp.fit(X_data)

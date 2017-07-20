@@ -57,7 +57,7 @@ class Dataset:
                     if section in names:
                         X.extend(names[section])
                     else:
-                        X.extend([np.nan, np.nan, np.nan, np.nan])
+                        X.extend([0, 0, 0, 0])
 
                 ## pe_imports
                 for dll_name, funs in self.pe_imports:
@@ -76,13 +76,13 @@ class Dataset:
                                 if fun in imports_funs:
                                     X.append(imports_funs[fun])
                                 else:
-                                    X.append(np.nan)
+                                    X.append(0)
 
                             break
                     
                     if not gen:
                         for fun in funs:
-                            X.append(None)
+                            X.append(0)
 
                 X_data.append(np.array(X))
 
@@ -98,11 +98,13 @@ class Dataset:
         y_data = np.array(y_data)
 
         # replacing NaN values to mean value
+        """
         self.logger.log('replacing NaN values to mean')
         imp = Imputer(missing_values='NaN', strategy='mean', axis=0)
         imp.fit(X_data)
         X_data = imp.transform(X_data)
         self.logger.log('done!')
+        """
 
         self.logger.log('dataset generated with %d benigns and %d malignant' % (benigns, malignants))
         return (X_data, y_data) 

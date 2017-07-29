@@ -31,6 +31,6 @@ clfs = [
     ('Decision Tree', tree.DecisionTreeClassifier(), os.path.join(OUTPUT_PATH, 'tree.pkl')),
     ('Gaussian Naive Bayes', GaussianNB(), os.path.join(OUTPUT_PATH, 'gnb.pkl')),
     ('Neural Network MLP', MLPClassifier(solver='lbfgs', alpha=1e-5,
-                               hidden_layer_sizes=(15,), random_state=1), os.path.join(OUTPUT_PATH, 'nnmlp.pkl')),
+                           hidden_layer_sizes=(15,), random_state=1), os.path.join(OUTPUT_PATH, 'nnmlp.pkl')),
 #    ('Linear SVM', svm.SVC(kernel='linear', C=1), os.path.join(OUTPUT_PATH, 'lsvm.pkl')),
 ]

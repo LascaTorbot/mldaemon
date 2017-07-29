@@ -31,12 +31,13 @@ def train(clf, kf, X, y, queue):
         fp += conf[0][1]
 
     total = tn + tp + fn + fp
-    tn_rate = tn / total
-    tp_rate = tp / total
-    fn_rate = fn / total
-    fp_rate = fp / total
+    tn_rate = tn / (tn + fp)
+    tp_rate = tp / (tp + fn)
+    fn_rate = fn / (tp + fn)
+    fp_rate = fp / (tn + fp)
+    accuracy = (tp + tn) / total
 
-    queue.put((tn_rate, tp_rate, fn_rate, fp_rate))
+    queue.put((tn_rate, tp_rate, fn_rate, fp_rate, accuracy))
 
 def build(clfs, X, y, cv, logger):
     kf = KFold(n_splits=cv)
@@ -56,7 +57,7 @@ def build(clfs, X, y, cv, logger):
     out_json = {}
     for i in range(len(threads)):
         threads[i].join()
-        tn_rate, tp_rate, fn_rate, fp_rate = results[i].get()
+        tn_rate, tp_rate, fn_rate, fp_rate, accuracy = results[i].get()
         
         name, clf, output_name = clfs[i]
 
@@ -65,7 +66,7 @@ def build(clfs, X, y, cv, logger):
             'tn': tn_rate,
             'fp': fp_rate,
             'fn': fn_rate,
-            'accuracy': tp_rate + tn_rate,
+            'accuracy': accuracy,
         }
 
         logger.log("%s finished!" % name)

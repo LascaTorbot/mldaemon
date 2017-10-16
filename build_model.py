@@ -74,3 +74,11 @@ def build(clfs, X, y, cv, logger):
         pickle.dump(clf, open(output_name, 'wb'))
 
     return out_json
+
+def predict(clfs, X, y, logger):
+    out_json = {}
+
+    # get all clfs
+    for c in clfs:
+        clf = pickle.load(open(c[2], 'rb'))  
+        print(clf)

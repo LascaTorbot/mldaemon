@@ -51,3 +51,20 @@ class MLDaemon:
 
         with open(output_json_file, 'w') as out_f:
             out_f.write(json.dumps(out_json, indent=4, sort_keys=True))
+
+    def test(self):
+        self.logger.log('Loading dataset...')
+        X, y = self.dataset.get_dataset()
+        self.logger.log('Success!')
+
+        self.logger.log("Loaded %d samples..." % len(X))
+
+        self.logger.log("Normalizing X matrix...")
+        X = normalize(X)
+        self.logger.log("Success!")
+
+        out = predict(clfs, X, y, self.logger)
+
+        with open(output_json_file, 'w') as out_f:
+            out_f.write(json.dumps(out_json, indent=4, sort_keys=True))
+

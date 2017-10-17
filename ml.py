@@ -5,14 +5,15 @@ from mldaemon.config import *
 import os
 
 class MLDaemon:
-    def __init__(self, MONGO_HOST, MONGO_PORT, DATABASE_PATH, OUTPUT_PATH, logger):
+    def __init__(self, MONGO_HOST, MONGO_PORT, DATABASE_PATH, OUTPUT_PATH, logger, gen_dict=True):
         self.logger = logger
         self.OUTPUT_PATH = OUTPUT_PATH
 
-        self.logger.log('Instantiating dictionary...')
-        self.dictionary = Dictionary(MONGO_HOST, MONGO_PORT, DATABASE_PATH, logger)
-        self.dictionary.gen_dict()
-        self.logger.log('Done!')
+        if gen_dict:
+            self.logger.log('Instantiating dictionary...')
+            self.dictionary = Dictionary(MONGO_HOST, MONGO_PORT, DATABASE_PATH, logger)
+            self.dictionary.gen_dict()
+            self.logger.log('Done!')
 
         self.logger.log("Instantiating dataset...")
         self.dataset = Dataset(MONGO_HOST, MONGO_PORT, DATABASE_PATH, logger)
@@ -63,7 +64,7 @@ class MLDaemon:
         X = normalize(X)
         self.logger.log("Success!")
 
-        out = predict(clfs, X, y, self.logger)
+        out_json = predict(clfs, X, y, self.logger)
 
         with open(output_json_file, 'w') as out_f:
             out_f.write(json.dumps(out_json, indent=4, sort_keys=True))

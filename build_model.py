@@ -80,5 +80,28 @@ def predict(clfs, X, y, logger):
 
     # get all clfs
     for c in clfs:
-        clf = pickle.load(open(c[2], 'rb'))  
-        print(clf)
+        clf = pickle.load(open(c[2], 'rb')) 
+        name = c[0]
+
+        conf = confusion_matrix(y, clf.predict(X), labels=[0, 1])
+        tn = conf[0][0]
+        fn = conf[1][0]
+        tp = conf[1][1]
+        fp = conf[0][1]
+
+        total = tn + tp + fn + fp
+        tn_rate = tn / (tn + fp)
+        tp_rate = tp / (tp + fn)
+        fn_rate = fn / (tp + fn)
+        fp_rate = fp / (tn + fp)
+        accuracy = (tp + tn) / total
+
+        out_json[name] = {
+            'tp': tp_rate,
+            'tn': tn_rate,
+            'fp': fp_rate,
+            'fn': fn_rate,
+            'accuracy': accuracy,
+        }
+
+    return out_json

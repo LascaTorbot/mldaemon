@@ -10,7 +10,7 @@ MIN_POSITIVES_RATE = 0.51
 class Dataset:
     def __init__(self, mongo_host, mongo_port, dict_path, logger):
         self.client = MongoClient(mongo_host, mongo_port)
-        self.db = self.client.cuckoo
+        self.db = self.client.cuckooexit
 
         self.logger = logger
 
@@ -35,8 +35,8 @@ class Dataset:
         y_data = []
 
         # loading data from mongodb
-        limit_data = self.db.analysis.count()
-        db_data = self.db.analysis.find()
+        db_data = self.db.analysis.find({'info.machine.name': 'win7'})
+        limit_data = db_data.count()
 
         self.logger.log('loaded %d data from mongodb' % limit_data)
         malignants = benigns = 0
@@ -45,7 +45,8 @@ class Dataset:
 
             X = []
             if 'static' in obj and 'pe_sections' in obj['static']\
-                    and 'pe_imports' in obj['static'] and 'virustotal' in obj:
+                    and 'pe_imports' in obj['static'] and 'virustotal' in obj \
+                    and 'positives' in obj['virustotal']:
 
                 ## pe_sections
                 names = {}

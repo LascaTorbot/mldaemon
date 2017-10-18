@@ -15,6 +15,8 @@ DATABASE_PATH = '/home/aquari/mldaemon/database'
 OUTPUT_PATH = '/home/aquari/mldaemon/output'
 LOG_PATH = '/home/aquari/mldaemon/log'
 
+SLEEP_TIME = 24 * 60 * 60
+
 # ML Algorithms configurations
 
 cv = 10
